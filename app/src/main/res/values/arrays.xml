@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="part_of_speech">
+        <item>名词</item>
+        <item>动词</item>
+        <item>形容词</item>
+        <item>副词</item>
+        <item>介词</item>
+        <item>连词</item>
+    </string-array>
+</resources>

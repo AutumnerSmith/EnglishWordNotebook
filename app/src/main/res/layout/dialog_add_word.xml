@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 仅保留一个根标签，且声明Android命名空间 -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center_horizontal">
+
+    <!-- 英文单词输入项 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="英文单词"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/et_english"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入英文（自动统一小写）"
+        android:inputType="textCapWords"
+        android:layout_marginBottom="16dp"
+        android:maxLines="1"/>
+
+    <!-- 词性选择项 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="单词词性"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <Spinner
+        android:id="@+id/sp_pos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/part_of_speech"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 释义输入项 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="单词释义"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/et_meaning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入核心释义"
+        android:layout_marginBottom="16dp"
+        android:maxLines="2"/>
+
+    <!-- 例句输入项（可选） -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="例句（可选）"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/et_example"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入例句（如：I love you.）"
+        android:maxLines="3"/>
+
+</LinearLayout>
