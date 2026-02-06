@@ -1,15 +1,34 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+# Android Gradle编译产物（核心，几百M的文件全过滤）
+.gradle/
+build/
+app/build/
+!gradle-wrapper.jar  # 这个文件要保留，别人拉项目能自动下Gradle
+
+# Android本地配置（敏感+无用）
 local.properties
+*.iml
+.idea/
+out/
+
+# 签名文件（绝对过滤，有就删+加规则）
+*.keystore
+*.jks
+*.signing.properties
+*.key
+
+# 系统通用缓存（全平台）
+.DS_Store   # Mac
+Thumbs.db   # Windows
+Desktop.ini # Windows
+
+# 开发临时文件
+*.log       # 日志
+*.apk       # 测试安装包
+*.aab       # 正式包
+temp/
+tmp/
+logs/
+
+# 其他冗余
+*.bak
+*.tmp
