@@ -7,13 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- 单词列表核心控件：RecyclerView -->
+    <!-- 单词列表（核心：RecyclerView） -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_word_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- 新增单词悬浮按钮 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_baseline_add_24"
+        android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

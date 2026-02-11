@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    // 移除：id("kotlin-kapt")
 }
 
 android {
@@ -30,9 +29,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    // 保留ViewBinding
     viewBinding {
         enable = true
+    }
+    // 新增：确保资源链接时识别Material组件（可选，但避免兼容问题）
+    buildFeatures {
+        compose = false // 关闭Compose，避免和ViewBinding冲突
     }
 }
 
@@ -46,18 +48,19 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    // Room依赖：将kapt改为annotationProcessor（Java项目用这个）
+    // Room依赖（Java项目用annotationProcessor，配置正确）
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
-    // ========== 关键修改点 ==========
-    // 1. 降低ViewModel版本（2.6.2更稳定，易下载）
-    // 2. 只保留核心依赖，避免重复/冗余
-    val lifecycleVersion = "2.5.1" // 2.5.1是更稳定的版本，几乎所有仓库都有
+    // Lifecycle依赖（版本稳定，配置正确）
+    val lifecycleVersion = "2.5.1"
     implementation("androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime:$lifecycleVersion")
-}
 
-// 移除：kapt { ... } 整个代码块
+    // ========== 核心补充：RecyclerView依赖（之前缺失！） ==========
+    val recyclerViewVersion = "1.3.2"
+    implementation("androidx.recyclerview:recyclerview:$recyclerViewVersion")
+
+}

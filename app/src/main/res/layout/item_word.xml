@@ -1,35 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:background="#f5f5f5">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- 英文单词 -->
+    <TextView
+        android:id="@+id/tv_english"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textStyle="bold"/>
 
-        <!-- 单词英文 -->
-        <TextView
-            android:id="@+id/tv_word_english"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+    <!-- 词性 -->
+    <TextView
+        android:id="@+id/tv_pos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_marginTop="4dp"/>
 
-        <!-- 单词状态（是否掌握） -->
-        <TextView
-            android:id="@+id/tv_word_mastered"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray" />
+    <!-- 释义 -->
+    <TextView
+        android:id="@+id/tv_meaning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:layout_marginTop="4dp"/>
 
-    </LinearLayout>
+    <!-- 例句 -->
+    <TextView
+        android:id="@+id/tv_example"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#999999"
+        android:layout_marginTop="8dp"
+        android:italic="true"/>
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>
