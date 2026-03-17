@@ -68,10 +68,13 @@ public class MainActivity extends AppCompatActivity {
         // 7. 绑定背诵按钮
         initReciteButton();
 
-        // 7. 观察单词列表数据（补全数据绑定到列表的逻辑）
+        // 8. 绑定文章阅读按钮
+        initArticleReadingButton();
+
+        // 9. 观察单词列表数据（补全数据绑定到列表的逻辑）
         observeWordListData();
 
-        // 8. 观察操作状态
+        // 10. 观察操作状态
         observeOperateStatus();
     }
 
@@ -138,6 +141,16 @@ public class MainActivity extends AppCompatActivity {
         Button btnRecite = findViewById(R.id.btn_recite);
         btnRecite.setOnClickListener(v -> {
             showReciteDialog();
+        });
+    }
+
+    /**
+     * 绑定文章阅读按钮点击事件
+     */
+    private void initArticleReadingButton() {
+        Button btnArticleReading = findViewById(R.id.btn_article_reading);
+        btnArticleReading.setOnClickListener(v -> {
+            startActivity(new android.content.Intent(MainActivity.this, ArticleReadingActivity.class));
         });
     }
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ArticleReadingActivity">
+
+    <EditText
+        android:id="@+id/et_article_input"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="请输入或粘贴英文文章"
+        android:padding="16dp"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/btn_show_article"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="16dp"
+        android:text="展示文章" />
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_article_display"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:lineSpacingExtra="8dp"
+            android:textColor="@android:color/black"
+            tools:text="文章内容将在这里显示" />
+
+    </ScrollView>
+
+</LinearLayout>

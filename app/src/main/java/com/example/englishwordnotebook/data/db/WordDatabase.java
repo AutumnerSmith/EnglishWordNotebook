@@ -6,14 +6,16 @@ import androidx.room.RoomDatabase;
 import android.content.Context;
 
 import com.example.englishwordnotebook.data.dao.IWordDao;
+import com.example.englishwordnotebook.data.dao.IWordMeaningCacheDao;
 import com.example.englishwordnotebook.data.dao.IWordMeaningDao;
 import com.example.englishwordnotebook.data.dao.IWordPartOfSpeechDao;
 import com.example.englishwordnotebook.data.entity.Word;
 import com.example.englishwordnotebook.data.entity.WordMeaning;
+import com.example.englishwordnotebook.data.entity.WordMeaningCache;
 import com.example.englishwordnotebook.data.entity.WordPartOfSpeech;
 
 // entities包含所有实体类，version保持1即可，无需修改
-@Database(entities = {Word.class, WordPartOfSpeech.class, WordMeaning.class}, version = 1, exportSchema = false)
+@Database(entities = {Word.class, WordPartOfSpeech.class, WordMeaning.class, WordMeaningCache.class}, version = 1, exportSchema = false)
 public abstract class WordDatabase extends RoomDatabase {
     // 单例实例，volatile保证线程安全
     private static volatile WordDatabase INSTANCE;
@@ -22,6 +24,7 @@ public abstract class WordDatabase extends RoomDatabase {
     public abstract IWordDao getWordDao();
     public abstract IWordPartOfSpeechDao getWordPartOfSpeechDao();
     public abstract IWordMeaningDao getWordMeaningDao();
+    public abstract IWordMeaningCacheDao getWordMeaningCacheDao();
 
     // 线程安全的单例初始化方法（核心新增fallbackToDestructiveMigration()）
     public static WordDatabase getInstance(Context context) {

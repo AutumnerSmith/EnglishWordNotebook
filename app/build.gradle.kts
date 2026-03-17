@@ -58,9 +58,24 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
 
     // ========== 核心补充：RecyclerView依赖（之前缺失！） ==========
     val recyclerViewVersion = "1.3.2"
     implementation("androidx.recyclerview:recyclerview:$recyclerViewVersion")
 
-}
+    // 网络请求相关依赖
+    val retrofitVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
+    // 协程支持
+    val coroutinesVersion = "1.6.4"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+
+    // 工具库
+    implementation("com.google.code.gson:gson:2.9.0")
+
+} 

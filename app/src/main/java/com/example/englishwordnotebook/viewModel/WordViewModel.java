@@ -227,8 +227,38 @@ public class WordViewModel extends AndroidViewModel {
         });
     }
 
+    /**
+     * 从文章中添加单词到笔记本
+     */
+    public void addWordFromArticle(String word, String meaning) {
+        // 基础非空校验
+        if (word == null || word.trim().isEmpty()) {
+            _operateStatusLiveData.postValue(WordOperateStatus.PARAM_INVALID);
+            return;
+        }
 
+        executor.execute(() -> {
+            try {
+                // 创建词性和释义的映射
+                Map<String, List<String>> posWithMeaningMap = new java.util.HashMap<>();
+                List<String> meaningList = new java.util.ArrayList<>();
+                meaningList.add(meaning);
+                posWithMeaningMap.put("未知", meaningList);
 
+                // 调用Repository新增方法
+                WordOperateStatus status = wordRepository.addCompleteWord(word, "", posWithMeaningMap);
 
-}
+                // 状态回调
+                _operateStatusLiveData.postValue(status);
+                if (status == WordOperateStatus.SUCCESS) {
+                    loadAllWordsByTimeDesc(); // 刷新列表
+                }
+            } catch (Exception e) {
+                // 替换printStackTrace为更规范的日志（此处简化为状态回调）
+                _operateStatusLiveData.postValue(WordOperateStatus.UNKNOWN_ERROR);
+            }
+        });
+    }
+
+} 
 
