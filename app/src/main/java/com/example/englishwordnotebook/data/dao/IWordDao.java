@@ -35,4 +35,15 @@ public interface IWordDao {
     @Transaction
     @Query("SELECT * FROM word ORDER BY englishWord ASC")
     LiveData<List<WordWithPosAndMeaning>> getAllWordsWithPosAndMeaningOrderByEnglishWord();
+
+    @Transaction
+    @Query("SELECT * FROM word WHERE id IN (SELECT word_id FROM word_part_of_speech WHERE posType = :posType) ORDER BY createTime DESC")
+    LiveData<List<WordWithPosAndMeaning>> getWordsWithPosAndMeaningByPosType(String posType);
+
+    @Transaction
+    @Query("SELECT * FROM word WHERE englishWord LIKE :keyword ORDER BY createTime DESC")
+    LiveData<List<WordWithPosAndMeaning>> searchWordsWithPosAndMeaning(String keyword);
+
+    @Query("SELECT COUNT(*) FROM word WHERE englishword = :english")
+    int isWordExists(String english);
 }

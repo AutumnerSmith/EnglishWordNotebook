@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#f5f5f5"
+    android:padding="12dp"
+    android:layout_marginBottom="12dp">
+
+    <!-- 词性行：选择器 + 按钮组 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <Spinner
+            android:id="@+id/sp_pos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/part_of_speech"/>
+
+        <!-- 添加释义按钮 -->
+        <Button
+            android:id="@+id/btn_add_meaning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加释义"
+            android:textSize="12sp"
+            android:layout_marginHorizontal="4dp"/>
+
+        <!-- 删除当前词性按钮 -->
+        <Button
+            android:id="@+id/btn_remove_pos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删词性"
+            android:textSize="12sp"
+            android:backgroundTint="#E53935"/>
+
+    </LinearLayout>
+
+    <!-- 该词性对应的释义容器 -->
+    <LinearLayout
+        android:id="@+id/ll_meaning_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+</LinearLayout>

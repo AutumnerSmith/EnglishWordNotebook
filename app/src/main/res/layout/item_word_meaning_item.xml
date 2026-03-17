@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="6dp">
+
+    <EditText
+        android:id="@+id/et_meaning"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="请输入核心释义"
+        android:maxLines="2"
+        android:textSize="14sp"/>
+
+    <!-- 删除当前释义按钮 -->
+    <Button
+        android:id="@+id/btn_remove_meaning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="删除"
+        android:textSize="12sp"
+        android:backgroundTint="#E53935"/>
+
+</LinearLayout>

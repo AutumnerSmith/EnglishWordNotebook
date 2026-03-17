@@ -38,7 +38,7 @@ public interface IWordMeaningDao {
      * @return 受影响的行数
      */
     @Query("DELETE FROM word_meaning WHERE word_id = :wordId")
-    int deleteMeaningListByWordId(long wordId);
+    int deleteByWordId(long wordId);
 
     /**
      * 删除单个释义

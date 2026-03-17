@@ -30,7 +30,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     viewBinding {
-        enable = true
+        enable = false
     }
     // 新增：确保资源链接时识别Material组件（可选，但避免兼容问题）
     buildFeatures {

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 仅保留一个根标签，且声明Android命名空间 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -8,7 +7,7 @@
     android:padding="20dp"
     android:gravity="center_horizontal">
 
-    <!-- 英文单词输入项 -->
+    <!-- 英文单词输入项（完全保留，仅修复自动小写的inputType） -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,50 +21,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="请输入英文（自动统一小写）"
-        android:inputType="textCapWords"
+        android:inputType="textNoSuggestions|textVisiblePassword"
         android:layout_marginBottom="16dp"
         android:maxLines="1"/>
 
-    <!-- 词性选择项 -->
+    <!-- 核心改动：多词性-多释义 标题 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="单词词性"
+        android:text="单词词性和释义"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
 
-    <Spinner
-        android:id="@+id/sp_pos"
+    <!-- 核心改动：词性组的总容器，所有动态词性组都添加到这里 -->
+    <LinearLayout
+        android:id="@+id/ll_pos_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/part_of_speech"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="vertical"/>
 
-    <!-- 释义输入项 -->
-    <TextView
+    <!-- 添加新词性的按钮 -->
+    <Button
+        android:id="@+id/btn_add_pos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="单词释义"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:text="添加新词性"
+        android:layout_marginVertical="8dp"/>
 
-    <EditText
-        android:id="@+id/et_meaning"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入核心释义"
-        android:layout_marginBottom="16dp"
-        android:maxLines="2"/>
-
-    <!-- 例句输入项（可选） -->
+    <!-- 例句输入项（完全保留，和原来一致） -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="例句（可选）"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
     <EditText

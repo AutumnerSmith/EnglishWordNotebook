@@ -38,7 +38,7 @@ public interface IWordPartOfSpeechDao {
      * @return 受影响的行数
      */
     @Query("DELETE FROM word_part_of_speech WHERE word_id = :wordId")
-    int deletePosListByWordId(long wordId);
+    int deleteByWordId(long wordId);
 
     /**
      * 删除单个词性

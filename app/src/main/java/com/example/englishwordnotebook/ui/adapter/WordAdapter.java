@@ -1,4 +1,4 @@
-package com.example.englishwordnotebook;
+package com.example.englishwordnotebook.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.englishwordnotebook.R;
 import com.example.englishwordnotebook.data.entity.WordMeaning;
 import com.example.englishwordnotebook.data.entity.WordPartOfSpeech;
 import com.example.englishwordnotebook.data.vo.WordWithPosAndMeaning;

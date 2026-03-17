@@ -1,48 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 根布局：垂直线性布局，带内边距和背景，保证展示美观 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:layout_marginBottom="8dp"
-    android:background="#f5f5f5">
+    android:layout_margin="8dp"
+    android:background="#f8f8f8"
+    android:elevation="2dp"
+    android:radius="8dp">
 
-    <!-- 英文单词 -->
+    <!-- 1. 英文单词（核心字段，加粗显示） -->
     <TextView
-        android:id="@+id/tv_english"
+        android:id="@+id/tv_word_english"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textColor="#000000"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"/>
 
-    <!-- 词性 -->
+    <!-- 2. 掌握状态（是否已掌握，用不同颜色区分） -->
     <TextView
-        android:id="@+id/tv_pos"
+        android:id="@+id/tv_word_mastered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:layout_marginBottom="6dp"
+        android:text="未掌握"/>
+
+    <!-- 3. 词性 -->
+    <TextView
+        android:id="@+id/tv_word_pos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="#666666"
-        android:layout_marginTop="4dp"/>
+        android:textColor="#2196F3"
+        android:layout_marginBottom="4dp"/>
 
-    <!-- 释义 -->
+    <!-- 4. 释义 -->
     <TextView
-        android:id="@+id/tv_meaning"
+        android:id="@+id/tv_word_meaning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="#333333"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginBottom="6dp"/>
 
-    <!-- 例句 -->
+    <!-- 5. 例句（斜体显示，灰色字体） -->
     <TextView
-        android:id="@+id/tv_example"
+        android:id="@+id/tv_word_example"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="#999999"
-        android:layout_marginTop="8dp"
-        android:italic="true"/>
+        android:textStyle="italic"/>
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.englishwordnotebook.data.repository;
 
 import android.content.Context;
 
+import com.example.englishwordnotebook.base.enums.WordOperateStatus;
 import com.example.englishwordnotebook.data.dao.IWordDao;
 import com.example.englishwordnotebook.data.dao.IWordMeaningDao;
 import com.example.englishwordnotebook.data.dao.IWordPartOfSpeechDao;
@@ -12,9 +13,11 @@ import com.example.englishwordnotebook.data.entity.WordPartOfSpeech;
 import com.example.englishwordnotebook.data.vo.WordWithPosAndMeaning;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 仓库层：统一封装数据操作，对外暴露简洁方法给ViewModel
@@ -106,6 +109,20 @@ public class WordRepository {
     }
 
     /**
+     * 插入单个词性
+     */
+    public long insertWordPartOfSpeech(WordPartOfSpeech wordPartOfSpeech) {
+        return posDao.insertWordPartOfSpeechList(java.util.Collections.singletonList(wordPartOfSpeech)).get(0);
+    }
+
+    /**
+     * 插入单个释义
+     */
+    public long insertWordMeaning(WordMeaning wordMeaning) {
+        return meaningDao.insertWordMeaningList(java.util.Collections.singletonList(wordMeaning)).get(0);
+    }
+
+    /**
      * 获取所有单词（含词性+释义），按创建时间倒序（最新添加在前）
      * @return LiveData<List<WordWithPosAndMeaning>> 供ViewModel观察，自动切换主线程
      */
@@ -119,5 +136,143 @@ public class WordRepository {
      */
     public LiveData<List<WordWithPosAndMeaning>> getWordsWithPosAndMeaningByEnglishWordAsc() {
         return wordsByEnglishWordAsc;
+    }
+
+    /**
+     * 删除单词
+     */
+    public boolean deleteWord(Word word) {
+        try {
+            wordDao.deleteWord(word);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 更新单词
+     */
+    public boolean updateWord(Word word) {
+        try {
+            wordDao.updateWord(word);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 按词性筛选单词
+     */
+    public LiveData<List<WordWithPosAndMeaning>> getWordsWithPosAndMeaningByPosType(String posType) {
+        return wordDao.getWordsWithPosAndMeaningByPosType(posType);
+    }
+
+    /**
+     * 搜索单词
+     */
+    public LiveData<List<WordWithPosAndMeaning>> searchWordsWithPosAndMeaning(String keyword) {
+        return wordDao.searchWordsWithPosAndMeaning("%" + keyword + "%");
+    }
+
+    /**
+     * 事务入库：多词性多释义单词
+     */
+    @Transaction
+    public WordOperateStatus addCompleteWord(String english, String example, Map<String, List<String>> posWithMeaningMap) {
+        // 1. 校验单词是否重复
+        if (wordDao.isWordExists(english) > 0) {
+            return WordOperateStatus.WORD_DUPLICATE;
+        }
+
+        // 2. 插入单词主表，拿到wordId
+        Word word = new Word();
+        word.setEnglishWord(english);
+        word.setExampleSentence(example);
+        long wordId = wordDao.insertWord(word);
+        if (wordId <= 0) {
+            return WordOperateStatus.UNKNOWN_ERROR;
+        }
+
+        // 3. 遍历词性，逐个插入，再插入对应释义
+        for (Map.Entry<String, List<String>> entry : posWithMeaningMap.entrySet()) {
+            String posType = entry.getKey();
+            List<String> meaningList = entry.getValue();
+
+            // 插入词性表，拿到posId
+            WordPartOfSpeech pos = new WordPartOfSpeech();
+            pos.setWord_id(wordId);
+            pos.setPosType(posType);
+            List<Long> posInsertIds = posDao.insertWordPartOfSpeechList(java.util.Collections.singletonList(pos));
+            if (posInsertIds.contains(-1L)) {
+                return WordOperateStatus.UNKNOWN_ERROR;
+            }
+            long posId = posInsertIds.get(0);
+
+            // 插入当前词性对应的所有释义
+            for (String meaning : meaningList) {
+                WordMeaning wordMeaning = new WordMeaning();
+                wordMeaning.setWord_id(wordId);
+                wordMeaning.setMeaningContent(meaning);
+                List<Long> meaningInsertIds = meaningDao.insertWordMeaningList(java.util.Collections.singletonList(wordMeaning));
+                if (meaningInsertIds.contains(-1L)) {
+                    return WordOperateStatus.UNKNOWN_ERROR;
+                }
+            }
+        }
+
+        return WordOperateStatus.SUCCESS;
+    }
+
+    /**
+     * 事务更新：多词性多释义单词
+     */
+    @Transaction
+    public boolean updateCompleteWord(Word oldWord, String english, String example, Map<String, List<String>> posWithMeaningMap) {
+        try {
+            // 1. 更新单词主表
+            oldWord.setEnglishWord(english);
+            oldWord.setExampleSentence(example);
+            wordDao.updateWord(oldWord);
+
+            // 2. 删除旧的词性和释义
+            posDao.deleteByWordId(oldWord.getId());
+            meaningDao.deleteByWordId(oldWord.getId());
+
+            // 3. 插入新的词性和释义
+            for (Map.Entry<String, List<String>> entry : posWithMeaningMap.entrySet()) {
+                String posType = entry.getKey();
+                List<String> meaningList = entry.getValue();
+
+                // 插入词性表
+                WordPartOfSpeech pos = new WordPartOfSpeech();
+                pos.setWord_id(oldWord.getId());
+                pos.setPosType(posType);
+                List<Long> posInsertIds = posDao.insertWordPartOfSpeechList(java.util.Collections.singletonList(pos));
+                if (posInsertIds.contains(-1L)) {
+                    return false;
+                }
+                long posId = posInsertIds.get(0);
+
+                // 插入当前词性对应的所有释义
+                for (String meaning : meaningList) {
+                    WordMeaning wordMeaning = new WordMeaning();
+                    wordMeaning.setWord_id(oldWord.getId());
+                    wordMeaning.setMeaningContent(meaning);
+                    List<Long> meaningInsertIds = meaningDao.insertWordMeaningList(java.util.Collections.singletonList(wordMeaning));
+                    if (meaningInsertIds.contains(-1L)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

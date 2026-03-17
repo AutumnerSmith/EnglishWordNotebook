@@ -6,14 +6,21 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.room.Transaction;
 
 import com.example.englishwordnotebook.base.enums.WordOperateStatus;
 import com.example.englishwordnotebook.data.entity.Word;
+import com.example.englishwordnotebook.data.entity.WordMeaning;
+import com.example.englishwordnotebook.data.entity.WordPartOfSpeech;
 import com.example.englishwordnotebook.data.repository.WordRepository;
 import com.example.englishwordnotebook.data.vo.WordWithPosAndMeaning;
+import com.example.englishwordnotebook.data.dao.IWordDao;
+import com.example.englishwordnotebook.data.dao.IWordMeaningDao;
+import com.example.englishwordnotebook.data.dao.IWordPartOfSpeechDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 
 /**
@@ -39,6 +46,8 @@ public class WordViewModel extends AndroidViewModel {
         loadAllWordsByTimeDesc();
     }
 
+
+
     /**
      * 按创建时间倒序加载单词（修正：调用Repository正确方法名）
      */
@@ -53,6 +62,41 @@ public class WordViewModel extends AndroidViewModel {
     public void loadAllWordsByLetterAsc() {
         currentWordListLiveData = wordRepository.getWordsWithPosAndMeaningByEnglishWordAsc();
         wordListLiveData = currentWordListLiveData;
+    }
+
+    /**
+     * 按词性筛选单词
+     */
+    public void loadWordsByPosType(String posType) {
+        currentWordListLiveData = wordRepository.getWordsWithPosAndMeaningByPosType(posType);
+        wordListLiveData = currentWordListLiveData;
+    }
+
+    /**
+     * 搜索单词
+     */
+    public void searchWords(String keyword) {
+        currentWordListLiveData = wordRepository.searchWordsWithPosAndMeaning(keyword);
+        wordListLiveData = currentWordListLiveData;
+    }
+
+    /**
+     * 标记单词为已掌握
+     */
+    public void markWordAsMastered(Word word) {
+        if (word == null || word.getId() <= 0) {
+            _operateStatusLiveData.postValue(WordOperateStatus.PARAM_INVALID);
+            return;
+        }
+        executor.execute(() -> {
+            try {
+                word.setMastered(true);
+                wordRepository.updateWord(word);
+                _operateStatusLiveData.postValue(WordOperateStatus.SUCCESS);
+            } catch (Exception e) {
+                _operateStatusLiveData.postValue(WordOperateStatus.UNKNOWN_ERROR);
+            }
+        });
     }
 
     /**
@@ -92,6 +136,33 @@ public class WordViewModel extends AndroidViewModel {
     }
 
     /**
+     * 新增完整单词（接受Map参数）
+     */
+    public void addCompleteWord(String english, String example, Map<String, List<String>> posWithMeaningMap) {
+        // 基础非空校验
+        if (english == null || english.trim().isEmpty() || posWithMeaningMap == null || posWithMeaningMap.isEmpty()) {
+            _operateStatusLiveData.postValue(WordOperateStatus.PARAM_INVALID);
+            return;
+        }
+
+        executor.execute(() -> {
+            try {
+                // 调用Repository新增方法
+                WordOperateStatus status = wordRepository.addCompleteWord(english, example, posWithMeaningMap);
+
+                // 状态回调
+                _operateStatusLiveData.postValue(status);
+                if (status == WordOperateStatus.SUCCESS) {
+                    loadAllWordsByTimeDesc(); // 刷新列表
+                }
+            } catch (Exception e) {
+                // 替换printStackTrace为更规范的日志（此处简化为状态回调）
+                _operateStatusLiveData.postValue(WordOperateStatus.UNKNOWN_ERROR);
+            }
+        });
+    }
+
+    /**
      * （后续可使用）删除单词
      */
     public void deleteWord(Word word) {
@@ -100,9 +171,14 @@ public class WordViewModel extends AndroidViewModel {
             return;
         }
         executor.execute(() -> {
-            // 后续补充Repository的delete方法调用
-            _operateStatusLiveData.postValue(WordOperateStatus.SUCCESS);
-            loadAllWordsByTimeDesc();
+            // 调用Repository删除方法
+            boolean success = wordRepository.deleteWord(word);
+            if (success) {
+                _operateStatusLiveData.postValue(WordOperateStatus.SUCCESS);
+                loadAllWordsByTimeDesc();
+            } else {
+                _operateStatusLiveData.postValue(WordOperateStatus.UNKNOWN_ERROR);
+            }
         });
     }
 
@@ -120,4 +196,39 @@ public class WordViewModel extends AndroidViewModel {
             loadAllWordsByTimeDesc();
         });
     }
+
+    /**
+     * 更新完整单词（包含多词性多释义）
+     */
+    public void updateWord(Word oldWord, String english, String example, Map<String, List<String>> posWithMeaningMap) {
+        // 基础非空校验
+        if (oldWord == null || oldWord.getId() <= 0 || english == null || english.trim().isEmpty()
+                || posWithMeaningMap == null || posWithMeaningMap.isEmpty()) {
+            _operateStatusLiveData.postValue(WordOperateStatus.PARAM_INVALID);
+            return;
+        }
+
+        executor.execute(() -> {
+            try {
+                // 调用Repository更新方法
+                boolean success = wordRepository.updateCompleteWord(oldWord, english, example, posWithMeaningMap);
+
+                // 状态回调
+                if (success) {
+                    _operateStatusLiveData.postValue(WordOperateStatus.SUCCESS);
+                    loadAllWordsByTimeDesc(); // 刷新列表
+                } else {
+                    _operateStatusLiveData.postValue(WordOperateStatus.UNKNOWN_ERROR);
+                }
+            } catch (Exception e) {
+                // 替换printStackTrace为更规范的日志（此处简化为状态回调）
+                _operateStatusLiveData.postValue(WordOperateStatus.UNKNOWN_ERROR);
+            }
+        });
+    }
+
+
+
+
 }
+
